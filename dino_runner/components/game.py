@@ -57,6 +57,8 @@ class Game:
                 self.events()
                 self.draw()
             pygame.quit()
+           
+               
             
    
 
@@ -65,10 +67,13 @@ class Game:
             if event.type == pygame.QUIT:
                     self.playing = False
                     self.game_over = False
-                                
-            if event.type == pygame.KEYDOWN:
-                    if self.game_over:
-                      self.__init__()
+            if self.game_over == True:
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
+                            game = Game()
+                            game.run()
+            pygame.display.update()
+                  
 
             
     def update(self):
@@ -104,6 +109,7 @@ class Game:
             self.draw_background()
             self.draw_ga()
             pygame.display.flip()
+            pygame.display.update()
 
     def draw_background(self):
         image_width = BG.get_width()
@@ -117,21 +123,22 @@ class Game:
     def draw_score(self):
         font = pygame.font.Font(FONT_ARIAL, 30)
         if self.points < 650:
-            surface = font.render("Score"+str(self.points), True, (0, 0, 0))
+            surface = font.render("Score " +str(self.points), True, (0, 0, 0))
         else:
-            surface = font.render("Score"+str(self.points), True, (255, 255, 255))
+            surface = font.render("Score "+str(self.points), True, (255, 255, 255))
         rect = surface.get_rect()
         rect.x = 950
         rect.y = 10
         self.screen.blit(surface, rect)
 
     def draw_ga(self):
-        font = pygame.font.Font(FONT_ARIAL, 80)
-        surface = font.render("GAME OVER, jajajaja😎😋", True, (0, 0, 0))
+        font = pygame.font.Font(FONT_ARIAL, 70)
+        surface = font.render("'GAME OVER' reinicia con space", True, (0, 0, 0))
         rect = surface.get_rect()
-        rect.x = 200
+        rect.x = 150
         rect.y = 250
         self.screen.blit(surface, rect)
+   
     
 
     
