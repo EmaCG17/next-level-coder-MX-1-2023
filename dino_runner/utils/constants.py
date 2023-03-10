@@ -1,6 +1,7 @@
 import pygame
 import os
 
+
 # Global Constants
 TITLE = "Chrome Dino Runner"
 SCREEN_HEIGHT = 600
@@ -74,3 +75,5 @@ DEFAULT_TYPE = "default"
 SHIELD_TYPE = "shield"
 
 LIVES = 4
+
+

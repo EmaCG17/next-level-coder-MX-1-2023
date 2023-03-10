@@ -3,11 +3,15 @@ import random
 from dino_runner.components.obstacles.captus import Captus
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS,BIRD
+from dino_runner.components.player_hearts.heart_manager import HeartManager
+
 
 class ObstacleManager:
-
+    
     def __init__(self):
         self.obstacles = []
+        self.heart_manager = HeartManager()
+        
 
     def update(self, game_speed, game):
 
@@ -20,19 +24,22 @@ class ObstacleManager:
                     self.obstacles.append(Captus(SMALL_CACTUS))
                 case 2:
                     self.obstacles.append(Captus(LARGE_CACTUS))
+        if self.heart_manager.heart_count  >  0:
+            for obstacle in self.obstacles:
+                obstacle.update(game_speed, self.obstacles)
 
-        for obstacle in self.obstacles:
-            obstacle.update(game_speed, self.obstacles)
-
-            if game.player.dino_rect.colliderect(obstacle.rect):
-                if not game.player.shield:
-                    game.heart_manager.reduce_heart()
-                if game.heart_manager.heart_count < 1:
-                    pygame.time.delay(300)
-                    game.playing = False
-                    
-                else:
-                   self.obstacles.remove(obstacle)
+                if game.player.dino_rect.colliderect(obstacle.rect):
+                    if not game.player.shield:
+                        game.heart_manager.reduce_heart()
+                    if game.heart_manager.heart_count < 1:
+                        pygame.time.delay(300)
+                        game.game_overs()
+                        game.playing = False
+                        break
+                        
+                    else:
+                        self.obstacles.remove(obstacle)
+            
 
     def draw(self, screen):
         for obstacle in self.obstacles:

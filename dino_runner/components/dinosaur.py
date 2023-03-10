@@ -1,5 +1,6 @@
 import pygame
-
+pygame.mixer.init()
+from dino_runner.components.player_hearts.heart_manager import HeartManager
 from pygame.sprite import Sprite
 from dino_runner.utils.constants import (
     RUNNING,
@@ -17,6 +18,8 @@ class Dinosaur(Sprite):
     POS_Y = 310
     POS_Y_DUCKING = 340
     JUMP_VEL = 8.5
+    heart_manager = HeartManager()
+   
 
     
     
@@ -70,7 +73,9 @@ class Dinosaur(Sprite):
     
     
     def draw(self, screen):
-        screen.blit(self.image, self.dino_rect)
+        if  self.heart_manager.heart_count  > 0:
+            screen.blit(self.image, self.dino_rect)
+        
 
     
     def run(self):

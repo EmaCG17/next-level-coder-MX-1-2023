@@ -1,5 +1,5 @@
-import pygame
 
+import pygame
 
 from dino_runner.utils.constants import (
     BG, 
@@ -33,6 +33,7 @@ class Game:
         self.heart_manager = HeartManager()
         self.power_up_manager = PowerUpManager()
         self.points = 0
+        self.game_over = False
 
     def increase_score(self):
         self.points += 1
@@ -42,18 +43,34 @@ class Game:
 
     def run(self):
         # Game loop: events - update - draw
-        self.playing = True
-        while self.playing:
-            self.events()
-            self.update()
-            self.draw()
-        pygame.quit()
+            self.playing = True
+            while self.playing:
+                self.update()
+                self.draw()
+                self.events()
+            pygame.quit()
+        
+       
+    def game_overs(self):
+            self.game_over = True
+            while self.game_over:
+                self.events()
+                self.draw()
+            pygame.quit()
+            
+   
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.playing = False
+                    self.playing = False
+                    self.game_over = False
+                                
+            if event.type == pygame.KEYDOWN:
+                    if self.game_over:
+                      self.__init__()
 
+            
     def update(self):
         pass
         user_input = pygame.key.get_pressed()
@@ -67,7 +84,7 @@ class Game:
 
        if self.heart_manager.heart_count > 0:
             self.clock.tick(FPS)
-            if self.points < 1000:
+            if self.points < 650:
                 self.screen.fill((255, 255, 255))
             else:
                 self.screen.fill((0, 0, 0))
@@ -82,7 +99,11 @@ class Game:
             pygame.display.update() #update objects inside
             pygame.display.flip() #display/show
        else:
-        pass
+            self.clock.tick(FPS)
+            self.screen.fill((255, 150, 0))
+            self.draw_background()
+            self.draw_ga()
+            pygame.display.flip()
 
     def draw_background(self):
         image_width = BG.get_width()
@@ -95,13 +116,21 @@ class Game:
 
     def draw_score(self):
         font = pygame.font.Font(FONT_ARIAL, 30)
-        if self.points < 1000:
-            surface = font.render(str(self.points), True, (0, 0, 0))
+        if self.points < 650:
+            surface = font.render("Score"+str(self.points), True, (0, 0, 0))
         else:
-            surface = font.render(str(self.points), True, (255, 255, 255))
+            surface = font.render("Score"+str(self.points), True, (255, 255, 255))
         rect = surface.get_rect()
-        rect.x = 1000
+        rect.x = 950
         rect.y = 10
+        self.screen.blit(surface, rect)
+
+    def draw_ga(self):
+        font = pygame.font.Font(FONT_ARIAL, 80)
+        surface = font.render("GAME OVER, jajajaja😎😋", True, (0, 0, 0))
+        rect = surface.get_rect()
+        rect.x = 200
+        rect.y = 250
         self.screen.blit(surface, rect)
     
 

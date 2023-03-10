@@ -15,7 +15,6 @@ class PowerUpManager:
 
         if len(self.power_ups) == 0:
             if self.when_appears == self.points:
-                print("generating power up")
                 self.when_appears = random.randint(self.when_appears + 200, 500 + self.when_appears)
                 self.power_ups.append(Shield())
 
